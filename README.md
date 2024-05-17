@@ -14,4 +14,4 @@ Run `docker compose up --build`
 
 # Kubernetes deployment
 
-Run `kubectl apply -k .`
+Make any necessary edits to `deployment.yaml`, then run `kubectl apply -k .`
