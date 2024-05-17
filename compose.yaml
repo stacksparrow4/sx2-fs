@@ -1,0 +1,8 @@
+services:
+  app:
+    build: .
+    volumes:
+      - ./u:/app/u
+    ports:
+      - 3000:80
+  

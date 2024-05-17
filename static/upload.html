@@ -1,0 +1,55 @@
+<input type="file" id="uploadfile">
+
+<p style="color: red" style="display: none" id="errormsg"></p>
+<p style="display: none" id="successmsg">
+    Successfully uploaded to <a id="successlink"></a> (link copied to clipboard)
+</p>
+
+<script>
+    const uploadFile = document.getElementById('uploadfile');
+    const errorMsg = document.getElementById("errormsg");
+    const successMsg = document.getElementById("successmsg");
+    const successLink = document.getElementById("successlink");
+
+    const handleUpload = async (file) => {
+        const formData = new FormData();
+        formData.append("uploadFile", file);
+
+        const resp = await fetch("/api/upload", {
+            method: "POST",
+            body: formData
+        });
+
+        if (resp.status !== 200) {
+            throw new Error(`Unexpected status code ${resp.status}`);
+        }
+
+        const respJson = await resp.json();
+
+        const { newFilename } = respJson;
+
+        const url = location.protocol + '//' + location.host + '/u/' + newFilename;
+
+        successMsg.style.display = 'block';
+        successLink.innerText = url;
+        successLink.href = url;
+
+        navigator.clipboard.writeText(url);
+    }
+
+    uploadFile.onchange = async (e) => {
+        errorMsg.style.display = 'none';
+        successMsg.style.display = 'none';
+
+        const f = e.target.files[0];
+        
+        try {
+            await handleUpload(f);
+        } catch (e) {
+            console.error(e);
+
+            errorMsg.style.display = 'block';
+            errorMsg.innerText = e.toString();
+        }
+    }
+</script>
