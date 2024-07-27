@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: sx2-fs
-          image: stacksparrow4/fs-app
+          image: stacksparrow4/priv:sx2-fs
           ports:
             - name: web
               containerPort: 80
@@ -45,7 +45,7 @@ metadata:
   name: sx2-fs
 spec:
   rules:
-  - host: fs.sx2.xyz
+  - host: fs.stacksparrow4.xyz
     http:
       paths:
       - path: /
