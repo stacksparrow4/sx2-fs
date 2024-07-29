@@ -42,16 +42,23 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: sx2-fs
+  name: sx2-fs-tls-ingress
+  annotations:
+    spec.ingressClassName: traefik
+    cert-manager.io/cluster-issuer: letsencrypt-prod
 spec:
   rules:
-  - host: fs.stacksparrow4.xyz
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: sx2-fs
-            port:
-              name: web
+    - host: fs.stacksparrow4.xyz
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: sx2-fs
+                port:
+                  name: web
+  tls:
+    - secretName: sx2-fs-tls
+      hosts:
+        - fs.stacksparrow4.xyz
